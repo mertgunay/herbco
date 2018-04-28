@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+  {% for dist in distributors %}
+  <div class="col-sm-12">
+    <h4>Distributor name: {{dist}}</h4>
+    {% if dist.item_set.all.count == 0 %}
+    Distributor not have any item
+    {% endif %}
+    {% for item in dist.item_set.all %}
+      Item Name: {{item.name}} | Item Sold: {{item.sold}}<br>
+    {% endfor %}
+    <br><br>
+</div>
+{% endfor %}
+{% endblock content %}

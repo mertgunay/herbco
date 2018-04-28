@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="col-sm-12 col-md-10 offset-md-1 col-lg-6 offset-lg-3">
+  {% if user.user_type == '1' %}    <!-- If User is Admin -->
+    <h4>You are ADMIN !!! <br>You can not register as Distrubor</h4>
+  {% elif user.user_type == '2' %}  <!-- If User is Manager -->
+    <h4>You are MANAGER !!! <br>You can not register as Distrubor</h4>
+  {% elif user.user_type == '3' %}  <!-- If User is Distributor -->
+    <h4>You are aldready DISTRIBUTOR !!! <br></h4>
+  {% else %}                        <!-- If User is Customer -->
+  <form method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button class="btn btn-dark" type="submit">Register as Distributor</button>
+  </form>
+  {% endif %}
+</div>
+{% endblock content %}

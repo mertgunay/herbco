@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="col-6 mx-auto">
+    Succesfully | Order Number: {{request.user.order_set.first.pk}}
+    <br><br>
+    <form action="{% url 'shop:comment' %}" method="post"> {% csrf_token %}
+      <div class="form-group">
+        <label for="comment"><b>Comment:</b></label>
+        <textarea name="comment" class="form-control" rows="5" id="comment"></textarea>
+        <br>
+        <button class="btn btn-primary" type="submit" name="button">Submit</button>
+      </div>
+    </form>
+    <a href="/" class="btn btn-success" value="Go to Home Page">Go To Home Page</a>
+</div>
+{% endblock content %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+{% if items|length == 0 %}
+  <h4>There is no item in this category</h4>
+{% else %}
+<div class="col-9">
+    <div class="row">
+      {% for item in items %}
+        <div class="col-sm-3">
+          <div class="card mb-4">
+            <img class="card-img-top" src="{{ item.image.url }}" width="85px" height="130px">
+            <div class="card-body">
+              <h4 class="card-title"><a href="{{ item.get_absolute_url }}">{{ item.name }}</a></h4>
+              <span>${{ item.price }}</span>
+              <a href="{% url 'shop:add_to_cart' item.id %}" class="btn btn-primary pull-right">Add
+                <i class="fa fa-plus" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+  </div>
+</div>
+{% endif %}
+</div>
+{% endblock content %}

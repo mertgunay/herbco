@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="col-6 mx-auto">
+    {% if orders|length == 0 %}
+      <h1>There is no order.</h1>
+    {% endif %}
+    {% for order in orders %}
+      Order Number: {{order.id}}<br>
+      {% for item in order.order_items.all %}
+      <ul>
+        <li>{{item.name}}</li>
+      </ul>
+      {% endfor %}
+    {% endfor %}
+  </div>
+{% endblock content %}

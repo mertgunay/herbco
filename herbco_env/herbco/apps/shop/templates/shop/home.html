@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% block content %}
+    <!-- Left-Side -->
+    <div class="col-sm-3">
+      <div class="card">
+        <div class="card-header"><b>Categories</b></div>
+        <ul class="list-group list-group-flush">
+          {% for category in categories %}
+          <li class="list-group-item"><a href="{{ category.get_absolute_url }}">{{ category.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <!-- Middle-Side -->
+    <div class="col-md-6">
+        <div class="row">
+          {% for item in items %}
+            <div class="col-sm-3">
+              <div class="card mb-4">
+                <img class="card-img-top" src="{{ item.image.url }}" width="85px" height="130px">
+                <div class="card-body">
+                  <h4 class="card-title"><a href="{{ item.get_absolute_url }}">{{ item.name }}</a></h4>
+                  {% if item.stock == 0 %}
+                  <h6><b>TÜKENDİ</b></h6>
+                  {% endif %}
+                  {% if not item.related_product %}
+                  <span>${{ item.price }}</span>
+                    {% if not item.stock == 0 %}
+                    <a href="{% url 'shop:add_to_cart' item.id %}" class="btn btn-{% if item.stock == 0 %}dark{% else %}primary{% endif %} pull-right">Add
+                      <i class="fa fa-plus" aria-hidden="true"></i>
+                    </a>
+                    {% endif %}
+                  {% else %}
+                  <!-- Button trigger modal -->
+                  <span>${{ item.price }}</span>
+                  <button type="button" class="btn btn-{% if item.stock == 0 %}dark{% else %}primary{% endif %} pull-right" data-toggle="modal" data-target="#{{item.pk}}">
+                    Add <i class="fa fa-plus" aria-hidden="true"></i>
+                  </button>
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="{{ item.pk }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLongTitle">{{ item.related_product.name }}</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <h4>This item has related product</h4>
+                          <h5>İf you want to buy {{ item.name }}, You have to buy {{ item.related_product.name }}</h5>
+                          <h6>Item name: {{ item.related_product.name }}</h6>
+                          <h6>Item price: {{ item.related_product.price }}</h6>
+                          <h6>Item Stock: {{ item.related_product.stock }}</h6>
+                          <h6>Item Weight: {{ item.related_product.weight }} Gram</h6>
+                          <img src="{{ item.related_product.image.url }}" alt="" width="175px", height="auto">
+                        </div>
+                        <div class="modal-footer">
+                          <a href="{% url 'shop:add_to_cart' item.id %}" class="btn btn-{% if item.stock == 0 %}dark{% else %}primary{% endif %} pull-right">Add
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+      </div>
+    </div>
+    <!-- Right Side -->
+    <div class="col-md-3">
+      <!-- Admin Panel -->
+      {% if user.user_type == '1' %}
+      <div class="card mb-3">
+        <div class="card-header"><b>Admin</b><br><small>Only Admin can see here</small></div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <a href="{% url 'shop:pending_items' %}">
+              <span class="badge badge-pill badge-danger">{{ item_count }}</span> Confirm Item
+            </a>
+          </li>
+          <li class="list-group-item">
+            <a href="{% url 'shop:updated_items' %}">
+              <span class="badge badge-pill badge-danger">{{ item_u_count }}</span> Update Item
+            </a>
+          </li>
+          <li class="list-group-item">
+            <a href="{% url 'shop:feedbacks' %}">
+              Show Feedbacks
+            </a>
+          </li>
+        </ul>
+      </div>
+      <!-- Manager Panel -->
+      {% elif user.user_type == '2' %}
+      <div class="card mb-3">
+        <div class="card-header"><b>Manager</b><br><small>Only Manager can see here</small></div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><a href="{% url 'users:distributors' %}">
+            <span class="badge badge-pill badge-danger">{{ dist_count }}</span> Confirm Distributor</a>
+          </li>
+          <li class="list-group-item">
+            <a href="{% url 'shop:statics' %}">
+              Show Statics
+            </a>
+          </li>
+        </ul>
+      </div>
+      <!-- Distributor Panel -->
+      {% elif user.user_type == '3' %}
+      <div class="card mb-3">
+        <div class="card-header"><b>Distributor</b><br><small>Only Distributor can see here</small></div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <a href="{% url 'shop:create' %}">Add New Item</a>
+          </li>
+          <li class="list-group-item">
+            <a href="{% url 'users:distributor_items' %}">My Items</a>
+          </li>
+        </ul>
+      </div>
+      {% endif %}
+
+      <!-- Best Seller -->
+      <div class="card mb-3">
+        <div class="card-header"><b>Best Seller</b></div>
+        <ul class="list-group list-group-flush">
+          {% for best in bestseller %}
+            <li class="list-group-item"><a href="{{ best.get_absolute_url }}">{{ best.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <!-- Last Products -->
+      <div class="card mb-3">
+        <div class="card-header"><b>Last Products</b></div>
+        <ul class="list-group list-group-flush">
+          {% for lastitem in lastfive %}
+            <li class="list-group-item"><a href="{{ lastitem.get_absolute_url }}">{{ lastitem.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+{% endblock content %}

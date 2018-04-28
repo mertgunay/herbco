@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="col-12">
+  {% if user.user_type == '1' %}
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Price</th>
+        <th scope="col">Stock</th>
+        <th scope="col">Is Approveled ?</th>
+      </tr>
+    </thead>
+    {% for item in items_updated %}
+    <form action="{% url 'shop:confirm_u_item' %}" method="post">
+      {% csrf_token %}
+    <tbody>
+      <tr>
+        <th scope="row">{{ item.pk }}</th>
+        <td>{{ item.name }}</td>
+        <td>{{ item.price }}</td>
+        <td>{{ item.stock }}</td>
+        <td>
+          <input type="checkbox" name="inputs" value="{{ item.pk }}"/>
+        </td>
+      </tr>
+    </tbody>
+    {% endfor %}
+  </table>
+  <input class="btn btn-dark btn-right pull-right" type="submit" value="Approvel Selected İtems"></a>
+  </form>
+  {% else %}
+    <h4>Only admin can access this page !</h4>
+  {% endif %}
+</div>
+{% endblock content %}

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="col-12">
+  {% if user.user_type == '1' %}
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Price</th>
+        <th scope="col">Stock</th>
+        <th scope="col">Related Item</th>
+        <th scope="col">Is Approveled ?</th>
+      </tr>
+    </thead>
+    {% for item in items_pend %}
+    <form action="{% url 'shop:confirm_item' %}" method="post">{% csrf_token %}
+    <tbody>
+      <tr>
+        <th scope="row">{{ item.pk }}</th>
+        <td>{{ item.name }}</td>
+        <td>{{ item.price }}</td>
+        <td>{{ item.stock }}</td>
+        <td>
+          {% if item.related_product %}
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#exampleModal">
+            {{item.related_product.name}}
+          </button>
+
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">{{item.related_product.name}}</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card mb-4">
+                      <img class="card-img-top" src="{{ item.related_product.image.url }}" width="85px" height="130px">
+                      <div class="card-body">
+                        <h4 class="card-title"><a href="{{ item.get_absolute_url }}">{{ item.related_product.name }}</a></h4>
+                        <span>${{ item.related_product.price }}</span><br>
+                        Description :
+                        {% if item.description %}
+                          {{item.related_product.description}}
+                        {% else %}
+                          None
+                        {% endif %}<br>
+                        Stock : {{ item.related_product.stock }}
+                        </a>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {% endif %}</td>
+        <td>
+          <input type="checkbox" name="inputs" value="{{ item.pk }}"/>
+        </td>
+      </tr>
+    </tbody>
+    {% endfor %}
+  </table>
+  <input class="btn btn-danger" name="reject_items" type="submit" value="Reject Selected Items">
+  <input class="btn btn-dark btn-right pull-right" name="accept_items" type="submit" value="Approvel Selected İtems">
+  </form>
+  {% else %}
+    <h4>Only admin can access this page !</h4>
+  {% endif %}
+</div>
+{% endblock content %}

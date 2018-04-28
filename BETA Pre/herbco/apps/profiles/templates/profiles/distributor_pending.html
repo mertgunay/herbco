@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="col-12">
+    {% if user.user_type == '2' %}
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Brand</th>
+          <th scope="col">Ceo Name</th>
+          <th scope="col">Average Earnings</th>
+          <th scope="col">Is Approveled ?</th>
+        </tr>
+      </thead>
+      {% for distributor in distributors %}
+      <form action="{% url 'users:distributor_confirm' %}" method="post">{% csrf_token %}
+      <tbody>
+        <tr>
+          <th scope="row">{{ distributor.id }}</th>
+          <td>{{ distributor.brand }}</td>
+          <td>{{ distributor.ceo_name }}</td>
+          <td>{{ distributor.average_earnings }}</td>
+          <td>
+            <input type="checkbox" name="inputs" value="{{distributor.pk}}"/>
+          </td>
+        </tr>
+      </tbody>
+      {% endfor %}
+    </table>
+    <input class="btn btn-danger btn-right" name="reject_dist" type="submit" value="Reject Selected User">
+    <input class="btn btn-dark btn-right pull-right" name="accept_dist" type="submit" value="Approvel Selected User">
+    </form>
+    {% else %}
+      <h4>Only managers can access this page !</h4>
+    {% endif %}
+  </div>
+{% endblock content %}

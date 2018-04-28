@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="col-9">
+  {% if item.is_updated %}
+    <h1>waiting for approvel</h1>
+  {% endif %}
+  {% if item.stock == 0 %}
+  <h1>There is no stock for this product</h1><br>
+  {% endif %}
+  <form action="{% url 'shop:add_to_cart' item.id %}" method="post">{% csrf_token %}
+  <img src="{{ item.image.url }}" alt="" width="175px", height="auto"><br>
+  <h4>Item name: {{ item.name }}</h4>
+  <br>
+  <h4>Item price: {{ item.price }}</h4><br>
+  <h4>Item Stock: {{ item.stock }}</h4><br>
+  <h4>Item Description: {{ item.description }}</h4><br>
+  <h4>Item Weight: {{ item.weight }} Gram</h4><br>
+  {% if not item.stock == 0 %}
+  <h4>Quantity: <input type="number" name="q" value="1" min="1" max="{{ item.stock }}"></h4>
+  {% endif %}
+  {% if item.related_product %}
+    <h3>This item has a related product. If you want to buy <b>{{item.name}}</b>, you should also buy <b>{{item.related_product.name}}</b> ; </h3><br>
+    <h4>Item name: {{ item.related_product.name }}</h4>
+    <br>
+    <h4>Item price: {{ item.related_product.price }}</h4>
+    <h4>Item Stock: {{ item.related_product.stock }}</h4>
+    <h4>Item Weight: {{ item.related_product.weight }} Gram</h4>
+    <img src="{{ item.related_product.image.url }}" alt="" width="175px", height="auto">
+  {% endif %}<br>
+    <input
+        type="submit"
+        class="btn btn-primary {% if item.stock == 0 or item.is_updated %}disabled btn-dark{% endif %}"
+        value="Add To Cart">
+    </input>
+</form>
+
+</div>
+{% endblock content %}

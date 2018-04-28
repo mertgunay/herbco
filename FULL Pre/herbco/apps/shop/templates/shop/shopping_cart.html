@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block content %}
+{% if not request.user.user_type == '4' %}
+  <h2>You are not customer!</h2>
+{% elif cart_items.count == 0 %}
+  <h2>There is no item in your shopping cart</h2>
+{% else %}
+<div class="col-sm-12">
+  <h1>Shopping Cart</h1>
+  <br>
+  <div class="shopping-cart">
+    <div class="column-labels">
+      <label class="product-image">Image</label>
+      <label class="product-details">Product</label>
+      <label class="product-price">Price</label>
+      <label class="product-quantity">Quantity</label>
+      <label class="product-removal">Remove</label>
+      <label class="product-line-price">Total & CheckOut</label>
+    </div>
+
+  {% for item in cart_items %}
+    <div class="product">
+      <div class="product-image">
+        <img src="{{ item.image.url }}">
+      </div>
+      <div class="product-details">
+        <h5>{{ item.name }}</h5>
+      </div>
+      <div class="product-price">{{ item.price }}</div>
+      <div class="product-quantity">
+        <input type="hidden" name="item" value="{{item.pk}}">
+        <input id="q" name="quantity" type="number" value="{{item.itemex.quantity}}" min="1" max="{{ item.stock }}">
+      </div>
+      <div class="product-removal">
+        <a href="{% url 'shop:delete_from_cart' item.id %}" class="btn btn-primary remove-product">
+          Remove
+        </a>
+      </div>
+      <div class="product-line-price">{{ item.price }}
+      </div>
+    </div>
+  {% endfor %}
+  <div class="totals">
+    <div class="totals-item">
+      <label>Subtotal</label>
+      <div class="totals-value" id="cart-subtotal">0</div>
+    </div>
+    <div class="totals-item">
+      <label>Tax (5%)</label>
+      <div class="totals-value" id="cart-tax">0</div>
+    </div>
+    <div class="totals-item">
+      <label>Shipping</label>
+      <div class="totals-value" id="cart-shipping">0</div>
+    </div>
+    <div class="totals-item totals-item-total">
+      <label>Grand Total</label>
+      <div class="totals-value" id="cart-total">0</div>
+    </div>
+  </div>
+  <a href="{% url 'shop:checkout' %}" class="checkout">Checkout</a>
+  <a href="/" class="checkout mr-3" style="background:grey;">Continue Shopping</a>
+  </div>
+</div>
+{% endif %}
+{% endblock content %}

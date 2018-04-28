@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="col-7 mx-auto">
+{% if request.user.user_type == '3' %}
+    <div class="row">
+      {% for item in items %}
+        <div class="col-sm-3">
+          <div class="card mb-4">
+            <img class="card-img-top" src="{{ item.image.url }}" width="85px" height="130px">
+            <div class="card-body">
+              <h4 class="card-title"><a href="{{ item.get_absolute_url }}">{{ item.name }}</a></h4>
+              <span>${{ item.price }}</span>
+              <a href="{% url 'shop:update' item.pk%}" class="btn btn-primary pull-right">Edit
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    {% if deleted_items %}
+    <h2>Deleted Items</h2> <br>
+    {% endif %}
+    <div class="row">
+      {% for item in deleted_items %}
+        <div class="col-sm-3">
+          <div class="card mb-4">
+            <img class="card-img-top" src="{{ item.image.url }}" width="85px" height="130px">
+            <div class="card-body">
+              <h4 class="card-title"><a href="{{ item.get_absolute_url }}">{{ item.name }}</a></h4>
+              <span>${{ item.price }}</span>
+              <a href="{% url 'shop:update' item.pk%}" class="btn btn-primary pull-right">Edit
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+{% else %}
+  <h1>You are not distributor.</h1>
+{% endif %}
+</div>
+{% endblock content %}

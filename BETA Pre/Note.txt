@@ -1,0 +1,15 @@
+Hocam çektiðiniz bu demo source kodu çalýþtýrmak için bir tane virtualenv kurmanýz ve gerekli paketleri yüklemeniz gerekmektedir.
+
+pip install django
+pip install django-crispy-forms
+pip install django-countries
+pip install pillow
+
+son olarak hazýrladýðýnýz bu virtualenv'ýn içine bizim projeyi kopyalamanýz gerekiyor.
+
+Eðer sorun yaþarsanýz;
+
+python manage.py makemigrations
+python manage.py migrate
+
+yapmanýz gerekebilir.

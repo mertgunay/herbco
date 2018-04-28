@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="col-6 mx-auto">
+    <ul>
+      {% for feedback in feedbacks %}
+        <li><b>From:</b> {{feedback.owner.username}};<br>
+          <b>Comment:</b> {{feedback.comment}}</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock content %}

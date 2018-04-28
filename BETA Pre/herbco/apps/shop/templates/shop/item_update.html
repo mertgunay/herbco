@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% if request.user.distributor_set.first == item.owner%}
+<div class="col-sm-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form|crispy }}
+  <button class="btn btn-primary" type="submit">Edit</button>
+</form>
+<br>
+<a href="{% url 'shop:item_delete' item.pk%}" class="btn btn-warning">Delete</a>
+
+</div>
+{% else %}
+  <h1>You are not owner for this item</h1>
+{% endif %}
+{% endblock content %}
